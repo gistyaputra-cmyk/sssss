@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Verifikasi Data Asrama</title>
+
+<style>
+    /* Background keren */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #6b73ff, #000dff);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: #333;
+    }
+
+    /* Box konten */
+    .box {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 25px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        max-width: 480px;
+        width: 100%;
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #222;
+        font-weight: 600;
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #bbb;
+        font-size: 15px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0,123,255,0.5);
+    }
+
+    button {
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: #005fcc;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .result {
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 15px;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    .success {
+        background: #d4edda;
+        color: #155724;
+        border-left: 5px solid #28a745;
+    }
+
+    .error {
+        background: #f8d7da;
+        color: #721c24;
+        border-left: 5px solid #dc3545;
+    }
+
+    /* placeholder style */
+    input::placeholder {
+        color: #aaa;
+    }
+
+</style>
+</head>
+
+<body>
+<div class="box">
+    <h2>Verifikasi Data Asrama</h2>
+
+    <label>Masukkan Nama + House (contoh: budi santoso/lion):</label>
+    <input type="text" id="inputNama" placeholder="ketik nama/house">
+
+    <label>Pilih Jenis Asrama:</label>
+    <select id="jenisAsrama">
+        <option value="">Pilih jenis asrama...</option>
+        <option value="putra">Putra</option>
+        <option value="putri">Putri</option>
+    </select>
+
+    <label>Pilih Gedung Asrama:</label>
+    <select id="gedungAsrama">
+        <option value="">Pilih gedung...</option>
+        <option value="soekarno">Soekarno</option>
+        <option value="hatta">Hatta</option>
+        <option value="ahmad yani">Ahmad Yani</option>
+        <option value="d.sekartaji">D. Sekartaji</option>
+        <option value="d.ambarsari">D. Ambarsari</option>
+        <option value="cut meutia">Cut Meutia</option>
+        <option value="d.kilisuci">D. Kilisuci</option>
+    </select>
+
+    <button onclick="cek()">VERIFIKASI</button>
+
+    <div id="hasil"></div>
+</div>
+
+<script>
+// daftar house yang diperbolehkan
+const houseValid = [
+    "mantaray", "dolphin", "shark", "rhino",
+    "lion", "komodo", "eagle", "dove", "hornbill"
+];
+
+function cek() {
+    let input = document.getElementById("inputNama").value.trim();
+    let jenis = document.getElementById("jenisAsrama").value;
+    let gedung = document.getElementById("gedungAsrama").value;
+    let hasil = document.getElementById("hasil");
+
+    if (!input || !jenis || !gedung) {
+        hasil.innerHTML = `<div class="result error">❗ Semua form wajib diisi!</div>`;
+        return;
+    }
+
+    if (!input.includes("/")) {
+        hasil.innerHTML = `<div class="result error">✖ Format salah! Gunakan nama/house (contoh: budi santoso/lion)</div>`;
+        return;
+    }
+
+    let pisah = input.split("/");
+    let nama = pisah[0].trim();
+    let house = pisah[1].trim().toLowerCase();
+
+    if (!nama || !house) {
+        hasil.innerHTML = `<div class="result error">✖ Format tidak lengkap. Contoh: budi santoso/lion</div>`;
+        return;
+    }
+
+    if (!houseValid.includes(house)) {
+        hasil.innerHTML = `
+            <div class="result error">
+                ✖ House <b>${house}</b> tidak ditemukan.<br>
+                Data tidak valid.
+            </div>
+        `;
+        return;
+    }
+
+    hasil.innerHTML = `
+        <div class="result success">
+            ✔ <b>Terverifikasi</b><br><br>
+            Nama: ${nama}<br>
+            House: ${house}<br>
+            Jenis Asrama: ${jenis}<br>
+            Gedung Asrama: ${gedung}
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
